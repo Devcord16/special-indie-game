@@ -50,19 +50,31 @@ const charList = [
     ],
   },
 ];
-const request = () => {
-  return "hello world";
-};
-const accept = () => {
-  return "hello world";
-};
-const reject = () => {
-  return "hello world";
-};
+
 function Char() {
-  const [char, changeChar] = useState(
-    charList[Math.floor(Math.random() * charList.length)]
-  );
+  let indexChar = Math.floor(Math.random() * charList.length);
+  const [char, changeChar] = useState(charList[indexChar]);
+  charList.splice(indexChar, 0);
+  console.log(charList);
+  const [dialog, changeDialog] = useState("");
+  const mati = () => {
+    return "YAHAHHAHAH KALAH";
+  };
+  const request = () => {
+    return "hello world";
+  };
+  const tindak = (response, isMonster, accept) => {
+    changeDialog(response);
+    if (accept) {
+      if (isMonster) {
+        mati();
+      } else {
+        indexChar = Math.floor(Math.random() * charList.length);
+        changeChar(charList[indexChar]);
+        charList.splice(indexChar, 1);
+      }
+    }
+  };
   return (
     <>
       <div className="boxChar">
@@ -74,14 +86,20 @@ function Char() {
         <button id="bicara" onClick={request(char.dialog[0].bicara)}>
           Ada apa dengan cara bicaramu?
         </button>
-        <button id="accept" onClick={accept(char.dialog[1].response)}>
+        <button
+          id="accept"
+          onClick={tindak(char.dialog[1].response, char.monster, true)}
+        >
           Kamu tampak aman
         </button>
-        <button id="reject" onClick={reject(char.dialog[2].response)}>
+        <button
+          id="reject"
+          onClick={tindak(char.dialog[2].response, char.monster, false)}
+        >
           Kamu tampak mencurigakan
         </button>
       </div>
-      <div className="boxDialog"></div>
+      <div className="boxDialog">{dialog}</div>
     </>
   );
 }
